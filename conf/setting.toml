@@ -5,6 +5,10 @@ y_test = "test_sets/y_test_heart.pkl"
 kn_y_preds = "preds/kn_y_preds_heart.pkl"
 xgb_y_preds = "preds/xgb_y_preds_heart.pkl"
 
+[REPORTS]
+kn_report = "reports/kn_report_{timestamp}.txt"
+xgb_report = "reports/xgb_report_{timestamp}.txt"
+
 [PREPROCESSOR]
 prep_conf = "conf/preprocessor_heart.pkl"
 

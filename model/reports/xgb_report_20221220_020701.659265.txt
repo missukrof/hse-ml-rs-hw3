@@ -1,0 +1,13 @@
+Confusion matrix
+[[148  11]
+ [  8 141]]
+Accuracy of Pipeline (model: XGBClassifier): 93.83
+Classification report:
+              precision    recall  f1-score   support
+
+           0       0.95      0.93      0.94       159
+           1       0.93      0.95      0.94       149
+
+    accuracy                           0.94       308
+   macro avg       0.94      0.94      0.94       308
+weighted avg       0.94      0.94      0.94       308
