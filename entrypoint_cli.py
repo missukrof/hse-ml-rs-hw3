@@ -8,7 +8,7 @@ parser.add_argument('path_to_x_test', type=str, help='The path to open the test 
 parser.add_argument('path_to_model', type=str, help='The path to model (pipeline) for opening')
 parser.add_argument('path_to_y_preds', type=str, help='The path to save the values predicted by the pipeline')
 args = parser.parse_args()
-
+print(args.path_to_x_test)
 responce = predict_values(path_to_x_test=args.path_to_x_test,
                           path_to_model=args.path_to_model,
                           path_to_y_preds=args.path_to_y_preds)
