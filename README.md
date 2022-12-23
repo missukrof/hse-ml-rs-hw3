@@ -26,6 +26,7 @@ The names and social security numbers of the patients were recently removed from
 <a href="https://github.com/missukrof/hse-ml-rs-hw3/tree/main/conf" target="_blank">conf folder</a> includes configuration files for a program
 <br><a href="https://github.com/missukrof/hse-ml-rs-hw3/tree/main/connector" target="_blank">connector folder</a> includes the bridge to the source of data
 <br><a href="https://github.com/missukrof/hse-ml-rs-hw3/tree/main/model" target="_blank">model folder</a> includes the models as well as their configuration files util folder includes miscellaneous functions like save/load models
+<br><a href="https://github.com/missukrof/hse-ml-rs-hw3/tree/main/util" target="_blank">util folder</a> includes miscellaneous functions like save/load models
 <br>The entrypoint.py contains a prediction function with the path to the models. The entrypoint_cli.py contains a prediction function with the path to the models to launch via the terminal.
 
 ## Algorithms used (formed in Pipeline: preprocessor & model)
