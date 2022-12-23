@@ -19,7 +19,7 @@ xgb_responce = predict_values(path_to_x_test=settings.DATA.x_test,
                               path_to_model=settings.MODEL.xgb_conf,
                               path_to_y_preds=settings.DATA.xgb_y_preds)
 
-logging.info(f'Prediction is {xgb_responce}')
+logging.info(f'Prediction (model: {type(settings.MODEL.xgb_conf[1]).__name__}) is {xgb_responce}')
 
 results_evaluation(path_to_y_preds=settings.DATA.xgb_y_preds,
                    path_to_y_test=settings.DATA.y_test,
