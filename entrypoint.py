@@ -1,4 +1,4 @@
-from constructor.model_constructor import predict_values, results_evaluation
+from model.constructor.model_constructor import predict_values, results_evaluation
 from conf.conf import settings
 from conf.conf import logging
 
