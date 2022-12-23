@@ -1,21 +1,21 @@
 [DATA]
 data_set = "https://raw.githubusercontent.com/5x12/ml-cookbook/master/supplements/data/heart.csv"
 target_name = 'target'
-x_test = "test_sets/x_test_heart.pkl"
-y_test = "test_sets/y_test_heart.pkl"
-kn_y_preds = "preds/kn_y_preds_heart.pkl"
-xgb_y_preds = "preds/xgb_y_preds_heart.pkl"
+x_test = "model/test_sets/x_test_heart.pkl"
+y_test = "model/test_sets/y_test_heart.pkl"
+kn_y_preds = "model/preds/kn_y_preds_heart.pkl"
+xgb_y_preds = "model/preds/xgb_y_preds_heart.pkl"
 
 [REPORTS]
-kn_report = "reports/kn_report_{timestamp}.txt"
-xgb_report = "reports/xgb_report_{timestamp}.txt"
+kn_report = "model/reports/kn_report_{timestamp}.txt"
+xgb_report = "model/reports/xgb_report_{timestamp}.txt"
 
 [PREPROCESSOR]
-prep_conf = "conf/preprocessor_heart.pkl"
+prep_conf = "model/conf/preprocessor_heart.pkl"
 
 [MODEL]
-kn_conf = "conf/kneighbors_heart.pkl"
-xgb_conf = "conf/xgboost_heart.pkl"
+kn_conf = "model/conf/kneighbors_heart.pkl"
+xgb_conf = "model/conf/xgboost_heart.pkl"
 
 [SPLITTING]
 parameters_splitting = {'random_state' = 42, 'test_size' = 0.3}
