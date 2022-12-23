@@ -6,11 +6,22 @@ from sklearn.compose import ColumnTransformer
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 
 
-def split_data(df, x_test_dir, y_test_dir, **kwargs) -> tuple:
+def split_data(df, x_test_dir, y_test_dir, target_variable, **kwargs) -> tuple:
+    """
+    This function divides the dataset into training and test data, returns them in tuple,
+    and also saves text data in a separate pickle file
+    :param df: Dataframe for splitting
+    :param x_test_dir: The path to save the test X-features
+    :param y_test_dir: The path to save the test target values
+    :param target_variable: Name of the target variable
+    :param kwargs: Parameters for the train_test_split
+    :return: Split X_train (X-train features), X_test (X-test features),
+    y_train (y-train target variables), y_test (y-test target variables)
+    """
     logging.info('Defining X (feature variables) and Y (target variable)...')
     # Variables
     X = df.iloc[:, :-1]
-    y = df['target']
+    y = df[target_variable]
     logging.info('X (feature variables) and Y (target variable) are defined.')
     logging.info('Splitting dataset begins...')
     # Split variables into train and test
@@ -31,7 +42,16 @@ def split_data(df, x_test_dir, y_test_dir, **kwargs) -> tuple:
     return X_train, X_test, y_train, y_test
 
 
-def make_preprocessor(categorical, numeric, ScalerClass, EncoderClass, save_prep_dir) -> 'sklearn.compose._column_transformer.ColumnTransformer':
+def make_preprocessor(categorical: list, numeric: list, ScalerClass, EncoderClass, save_prep_dir: str) -> 'sklearn.compose._column_transformer.ColumnTransformer':
+    """
+    This function forms a preprocessor for categorical and numeric features
+    :param categorical: List of the categorical columns (features)
+    :param numeric: List of the numeric columns (features)
+    :param ScalerClass: Scaler class
+    :param EncoderClass: Encoder class
+    :param save_prep_dir: The path to preprocessor for opening/saving/updating
+    :return: Preprocessor with the Scaler (for numeric) & Encoder (for categorical) classes
+    """
     logging.info(f'Building {type(ScalerClass).__name__} Pipeline begins...')
     numeric_transformer = Pipeline(
         steps=[
@@ -78,6 +98,12 @@ def make_preprocessor(categorical, numeric, ScalerClass, EncoderClass, save_prep
 
 
 def make_pipeline(PreprocessorClass, ModelClass) -> 'sklearn.pipeline.Pipeline':
+    """
+    This function forms a pipeline from a preprocessor and a model.
+    :param PreprocessorClass: Preprocessor class
+    :param ModelClass: Model class
+    :return: Pipeline with defined Preprocessor & Model classes
+    """
     logging.info(f'Building Pipeline with {type(PreprocessorClass).__name__}, {type(ModelClass).__name__} begins...')
     pipeline = Pipeline(
         steps=[
@@ -89,7 +115,13 @@ def make_pipeline(PreprocessorClass, ModelClass) -> 'sklearn.pipeline.Pipeline':
     return pipeline
 
 
-def cross_validation(CrossValClass, cv_params) -> 'sklearn.model_selection._split.KFold':
+def cross_validation(CrossValClass, cv_params: dict) -> 'sklearn.model_selection._split.KFold':
+    """
+    This function defines cross-validator.
+    :param CrossValClass: Cross-validator class
+    :param cv_params: Parameters for cross-validator class
+    :return: Cross-validator class with the specified parameters
+    """
     kf = CrossValClass(**cv_params)
     return kf
 
@@ -98,6 +130,17 @@ def search_parameters(pipeline,
                       X_train, y_train,
                       CrossValClass=KFold, cv_params={},
                       SearchParamsClass=GridSearchCV, sp_params={}) -> 'sklearn.pipeline.Pipeline':
+    """
+    This function selects the optimal hyperparameters of the model
+    :param pipeline: Pipeline with column transformer and model for hyperparameters tuning
+    :param X_train: DataFrame of X-train features
+    :param y_train: Array of y-train (target) values
+    :param CrossValClass: Cross-validator class
+    :param cv_params: Parameters for cross-validator class
+    :param SearchParamsClass: Search parameters class for searching over specified parameter values for an estimator
+    :param sp_params: Specified parameter values for searching for an estimator
+    :return: The best estimator (pipeline) with the best tuned parameters
+    """
     kf = cross_validation(CrossValClass, cv_params)
     logging.info(f'Searching for best hyperparameters {SearchParamsClass.__name__} begins...')
     grid = SearchParamsClass(pipeline, cv=kf, **sp_params)
@@ -107,7 +150,15 @@ def search_parameters(pipeline,
     return grid.best_estimator_
 
 
-def fit_pipeline(pipeline, X_train, y_train, save_model_dir) -> tuple:
+def fit_pipeline(pipeline, X_train, y_train, save_model_dir: str) -> tuple:
+    """
+    This function fits the pipeline using training data
+    :param pipeline: Pipeline with column transformer and model
+    :param X_train: DataFrame of X-train features
+    :param y_train: Array of y-train (target) values
+    :param save_model_dir: The path to model (pipeline) for opening/saving/updating
+    :return: Formed pipeline, train accuracy score
+    """
     try:
         previous_model = load_from_pickle(dir=save_model_dir)
         if previous_model != pipeline:
@@ -132,7 +183,14 @@ def fit_pipeline(pipeline, X_train, y_train, save_model_dir) -> tuple:
     return model, accuracy_score
 
 
-def predict_values(path_to_x_test, path_to_model, path_to_y_preds) -> 'numpy.ndarray':
+def predict_values(path_to_x_test: str, path_to_model: str, path_to_y_preds: str) -> 'numpy.ndarray':
+    """
+    This function predicts target values using a ready-made pipeline
+    :param path_to_x_test: The path to open the test X-features for the pipeline prediction
+    :param path_to_model: The path to model (pipeline) for opening
+    :param path_to_y_preds: The path to save the values predicted by the pipeline
+    :return: Numpy array of predicted values
+    """
     pipeline = load_from_pickle(dir=path_to_model)
     X_test = load_from_pickle(dir=path_to_x_test)
 
@@ -150,7 +208,16 @@ def predict_values(path_to_x_test, path_to_model, path_to_y_preds) -> 'numpy.nda
     return y_preds
 
 
-def results_evaluation(path_to_y_preds, path_to_y_test, path_to_model, model_report_dir) -> str:
+def results_evaluation(path_to_y_preds: str, path_to_y_test: str, path_to_model: str, model_report_dir: str) -> str:
+    """
+    This function generates results evaluation report, including: confusion matrix, accuracy score,
+    classification report (precision, recall, f1-score, support, accuracy, macro avg, weighted avg)
+    :param path_to_y_preds: The path to open predicted by the pipeline & saved target values
+    :param path_to_y_test: The path to open the test target values
+    :param path_to_model: The path to model (pipeline) for opening
+    :param model_report_dir: The path to the model (pipeline) execution report
+    :return: Pipeline perform report
+    """
     y_preds = load_from_pickle(dir=path_to_y_preds)
     y_test = load_from_pickle(dir=path_to_y_test)
     pipeline = load_from_pickle(dir=path_to_model)

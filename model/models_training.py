@@ -13,6 +13,7 @@ df = get_data(settings.DATA.data_set)
 X_train, X_test, y_train, y_test = split_data(df=df,
                                               x_test_dir=settings.DATA.x_test,
                                               y_test_dir=settings.DATA.y_test,
+                                              target_variable=settings.DATA.target_name,
                                               **settings.SPLITTING.parameters_splitting)
 
 preprocessors = make_preprocessor(categorical=settings.CATEGORICAL.cat_features,

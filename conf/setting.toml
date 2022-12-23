@@ -1,5 +1,6 @@
 [DATA]
 data_set = "https://raw.githubusercontent.com/5x12/ml-cookbook/master/supplements/data/heart.csv"
+target_name = 'target'
 x_test = "test_sets/x_test_heart.pkl"
 y_test = "test_sets/y_test_heart.pkl"
 kn_y_preds = "preds/kn_y_preds_heart.pkl"
